@@ -1,3 +1,4 @@
+import { MenuFlavor } from "@grammyjs/menu";
 import { Context } from "grammy";
 
 export interface Button {
@@ -5,12 +6,12 @@ export interface Button {
 	payload: string;
 }
 
-export interface RowButton<C extends Context = Context> extends Button {
+export interface RowButton<C extends Context = Context & MenuFlavor> extends Button {
 	callback: (ctx: C) => void;
 	submenu?: string;
 }
 
-interface Result<C extends Context = Context> {
+interface Result<C extends Context = Context & MenuFlavor> {
 	rows: RowButton<C>[];
 	pagination: Button[];
 	count: number;
@@ -27,7 +28,7 @@ const enum Pagination {
 	EMPTY = "$",
 }
 
-export function paginated<C extends Context = Context>(
+export function paginated<C extends Context = Context & MenuFlavor>(
 	array: RowButton<C>[],
 	pageSize: number,
 	index: number
@@ -102,7 +103,13 @@ export function paginated<C extends Context = Context>(
 		}
 	}
 
-	return { rows, count: pagesCount, pagination, empty, index: pageNumber };
+	return {
+		rows,
+		count: pagesCount,
+		pagination,
+		empty,
+		index: pageNumber,
+	};
 }
 
 function button(num: number, text: Pagination): Button {

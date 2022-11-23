@@ -1,29 +1,32 @@
 import { Context } from "grammy";
-import { MenuRange } from "@grammyjs/menu";
+import { MenuFlavor, MenuRange } from "@grammyjs/menu";
 import { paginated, RowButton } from "./utils/paginated.js";
 import { encodeMatch } from "./utils/encodematch.js";
+import { replaceMatch } from "./utils/replacematch.js";
+import { str2num } from "./utils/str2num.js";
 
-export function usePagination<C extends Context = Context>(
-	getButtons: (ctx: C) => Promise<RowButton<C>[]>
+export function usePagination<C extends Context = Context & MenuFlavor>(
+	getButtons: (ctx: C) => Promise<RowButton<C>[]>,
+	pageSize = 5
 ): (ctx: C, range: MenuRange<C>) => Promise<MenuRange<C>> {
 	return async (ctx, range) => {
 		try {
 			const buttons = await getButtons(ctx);
 			const { p } = encodeMatch(ctx.match as string, ["p"]);
 
-			const { empty, pagination, rows } = paginated(buttons, 7, p);
+			const { empty, pagination, rows } = paginated(buttons, pageSize, p ?? 1);
 
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
 
 				if (typeof row.submenu === "undefined") {
 					range
-						.text({ text: row.text, payload: [row.payload, `p:${p}`].join(";") }, row.callback)
+						.text({ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") }, row.callback)
 						.row();
 				} else {
 					range
 						.submenu(
-							{ text: row.text, payload: [row.payload, `p:${p}`].join(";") },
+							{ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") },
 							row.submenu,
 							row.callback
 						)
@@ -34,7 +37,16 @@ export function usePagination<C extends Context = Context>(
 			for (let i = 0; i < empty.length; i++) range.text("").row();
 
 			pagination.forEach((a) =>
-				range.text({ text: a.text, payload: a.payload }, (ctx) => ctx.menu.update())
+				range.text(
+					{
+						text: a.text,
+						payload:
+							(ctx.match as string) !== ""
+								? replaceMatch("p", str2num(a.payload), ctx.match as string)
+								: a.payload,
+					},
+					(ctx) => ctx.menu.update()
+				)
 			);
 		} catch (error) {
 			throw error;
@@ -45,5 +57,6 @@ export function usePagination<C extends Context = Context>(
 }
 
 export type { RowButton };
+export { encodeMatch };
 
 export default usePagination;
