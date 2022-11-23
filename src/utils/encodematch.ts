@@ -1,20 +1,14 @@
 interface Result {
-	[key: string]: number;
+	[key: string]: number | undefined;
 }
 
-export function encodeMatch(str: string, match: string[], defaultValue = 1): Result {
+export function encodeMatch(str: string, match: string[]): Result {
 	const result: Result = {};
-	const arr = str?.split(";") ?? [];
+	const arr = str.split(";") ?? [];
 
-	arr.forEach((a) => {
-		match.forEach((b) => {
-			if (new RegExp(`${b}:`).test(a)) {
-				result[b] = Number(a.replace(`${b}:`, ""));
-			} else {
-				result[b] = defaultValue;
-			}
-
-			if (Number.isNaN(result[b])) throw new Error("Value is NaN");
+	match.forEach((b) => {
+		arr.forEach((a) => {
+			if (new RegExp(`${b}:`).test(a)) result[b] = Number(a.replace(`${b}:`, ""));
 		});
 	});
 
