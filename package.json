@@ -1,6 +1,6 @@
 {
 	"name": "@vtk/gm-pagination",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "Pagination for grammy menu",
 	"main": "build/index.js",
 	"scripts": {
