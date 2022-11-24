@@ -1,6 +1,6 @@
 export function encodeMatch(str, match) {
     const result = {};
-    const arr = str.split(";") ?? [];
+    const arr = str?.split(";") ?? [];
     match.forEach((b) => {
         arr.forEach((a) => {
             if (new RegExp(`${b}:`).test(a))
