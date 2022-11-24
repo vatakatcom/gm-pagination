@@ -25,7 +25,7 @@ export function usePagination(getButtons, pageSize = 5) {
                 range.text("").row();
             pagination.forEach((a) => range.text({
                 text: a.text,
-                payload: ctx.match !== ""
+                payload: typeof ctx.match !== "undefined" && ctx.match !== ""
                     ? replaceMatch("p", str2num(a.payload), ctx.match)
                     : a.payload,
             }, (ctx) => ctx.menu.update()));
