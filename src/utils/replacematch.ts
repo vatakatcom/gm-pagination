@@ -1,5 +1,5 @@
 export function replaceMatch(key: string, value: number, payload: string) {
-	const arr = payload.split(";") ?? [];
+	const arr = payload?.split(";") ?? [];
 
 	return arr
 		.map((a) => {
