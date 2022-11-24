@@ -41,7 +41,7 @@ export function usePagination<C extends Context = Context & MenuFlavor>(
 					{
 						text: a.text,
 						payload:
-							(ctx.match as string) !== ""
+							typeof ctx.match !== "undefined" && (ctx.match as string) !== ""
 								? replaceMatch("p", str2num(a.payload), ctx.match as string)
 								: a.payload,
 					},
