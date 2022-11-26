@@ -14,7 +14,7 @@ export function usePagination<C extends Context = Context & MenuFlavor>(
 			const buttons = await getButtons(ctx);
 			const { p } = encodeMatch(ctx.match as string, ["p"]);
 
-			const { empty, pagination, rows } = paginated(buttons, pageSize, p ?? 1);
+			const { empty, pagination, rows } = paginated(buttons, pageSize, (p as number) ?? 1);
 
 			for (let i = 0; i < rows.length; i++) {
 				const row = rows[i];
