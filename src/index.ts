@@ -21,14 +21,17 @@ export function usePagination<C extends Context = Context>(
 
 				if (typeof row.submenu === "undefined") {
 					range
-						.text({ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") }, row.callback)
+						.text(
+							{ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") },
+							row.callback!
+						)
 						.row();
 				} else {
 					range
 						.submenu(
 							{ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") },
 							row.submenu,
-							row.callback
+							row.callback!
 						)
 						.row();
 				}
@@ -45,10 +48,7 @@ export function usePagination<C extends Context = Context>(
 								? replaceMatch("p", str2num(a.payload), ctx.match as string)
 								: a.payload,
 					},
-					(ctx) => {
-						const { p: index } = encodeMatch(a.payload, ["p"]);
-						if (index !== p ?? 1) ctx.menu.update();
-					}
+					a.callback!
 				)
 			);
 		} catch (error) {
