@@ -72,7 +72,7 @@ function button(num, text, isCurrent = false) {
     return {
         text: text.replace("$", String(num)),
         payload: `p:${String(num)}`,
-        callback: text === "\u00B7 $ \u00B7" /* Pagination.STAY */ ? undefined : (ctx) => ctx.menu.update(),
+        callback: (ctx) => ctx.menu.update(),
     };
 }
 //# sourceMappingURL=paginated.js.map
