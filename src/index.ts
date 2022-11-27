@@ -5,7 +5,7 @@ import { encodeMatch } from "./utils/encodematch.js";
 import { replaceMatch } from "./utils/replacematch.js";
 import { str2num } from "./utils/str2num.js";
 
-export function usePagination<C extends Context & MenuFlavor = Context & MenuFlavor>(
+export function usePagination<C extends Context = Context>(
 	getButtons: (ctx: C) => Promise<RowButton<C>[]>,
 	pageSize = 5
 ): (ctx: C, range: MenuRange<C>) => Promise<MenuRange<C>> {
