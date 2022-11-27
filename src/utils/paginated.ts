@@ -114,12 +114,11 @@ export function paginated<C extends Context = Context>(
 
 function button<C extends Context = Context>(
 	num: number,
-	text: Pagination,
-	isCurrent = false
+	text: Pagination
 ): Button<C & MenuFlavor> {
 	return {
 		text: text.replace("$", String(num)),
 		payload: `p:${String(num)}`,
-		callback: (ctx) => ctx.menu.update(),
+		callback: (ctx) => (text === Pagination.STAY ? ctx.answerCallbackQuery() : ctx.menu.update()),
 	};
 }
