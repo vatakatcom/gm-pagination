@@ -6,12 +6,12 @@ export interface Button {
 	payload: string;
 }
 
-export interface RowButton<C extends Context = Context & MenuFlavor> extends Button {
+export interface RowButton<C extends Context & MenuFlavor = Context & MenuFlavor> extends Button {
 	callback: (ctx: C) => void;
 	submenu?: string;
 }
 
-interface Result<C extends Context = Context & MenuFlavor> {
+interface Result<C extends Context & MenuFlavor = Context & MenuFlavor> {
 	rows: RowButton<C>[];
 	pagination: Button[];
 	count: number;
@@ -28,7 +28,7 @@ const enum Pagination {
 	EMPTY = "$",
 }
 
-export function paginated<C extends Context = Context & MenuFlavor>(
+export function paginated<C extends Context & MenuFlavor = Context & MenuFlavor>(
 	array: RowButton<C>[],
 	pageSize: number,
 	index: number
