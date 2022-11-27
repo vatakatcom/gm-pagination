@@ -28,7 +28,11 @@ export function usePagination(getButtons, pageSize = 5) {
                 payload: typeof ctx.match !== "undefined" && ctx.match !== ""
                     ? replaceMatch("p", str2num(a.payload), ctx.match)
                     : a.payload,
-            }, (ctx) => ctx.menu.update()));
+            }, (ctx) => {
+                const { p: index } = encodeMatch(a.payload, ["p"]);
+                if (index !== p ?? 1)
+                    ctx.menu.update();
+            }));
         }
         catch (error) {
             throw error;
