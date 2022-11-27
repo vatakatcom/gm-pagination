@@ -68,11 +68,11 @@ export function paginated(array, pageSize, index) {
         index: pageNumber,
     };
 }
-function button(num, text, isCurrent = false) {
+function button(num, text) {
     return {
         text: text.replace("$", String(num)),
         payload: `p:${String(num)}`,
-        callback: (ctx) => ctx.menu.update(),
+        callback: (ctx) => (text === "\u00B7 $ \u00B7" /* Pagination.STAY */ ? ctx.answerCallbackQuery() : ctx.menu.update()),
     };
 }
 //# sourceMappingURL=paginated.js.map
