@@ -119,6 +119,6 @@ function button<C extends Context = Context>(
 	return {
 		text: text.replace("$", String(num)),
 		payload: `p:${String(num)}`,
-		callback: (ctx) => (text === Pagination.STAY ? ctx.answerCallbackQuery() : ctx.menu.update()),
+		callback: (ctx) => ctx.menu.update(),
 	};
 }
