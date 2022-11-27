@@ -5,7 +5,7 @@ import { encodeMatch } from "./utils/encodematch.js";
 import { replaceMatch } from "./utils/replacematch.js";
 import { str2num } from "./utils/str2num.js";
 
-export function usePagination<C extends Context = Context & MenuFlavor>(
+export function usePagination<C extends Context & MenuFlavor = Context & MenuFlavor>(
 	getButtons: (ctx: C) => Promise<RowButton<C>[]>,
 	pageSize = 5
 ): (ctx: C, range: MenuRange<C>) => Promise<MenuRange<C>> {
@@ -45,7 +45,10 @@ export function usePagination<C extends Context = Context & MenuFlavor>(
 								? replaceMatch("p", str2num(a.payload), ctx.match as string)
 								: a.payload,
 					},
-					(ctx) => ctx.menu.update()
+					(ctx) => {
+						const { p: index } = encodeMatch(a.payload, ["p"]);
+						if (index !== p ?? 1) ctx.menu.update();
+					}
 				)
 			);
 		} catch (error) {
