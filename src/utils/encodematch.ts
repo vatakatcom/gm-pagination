@@ -4,13 +4,14 @@ interface Result {
 
 export function encodeMatch(str: string | undefined, match: string[]): Result {
 	const result: Result = {};
-	const arr = str?.split(";") ?? [];
 
-	match.forEach((b) => {
-		arr.forEach((a) => {
-			if (new RegExp(`${b}:`).test(a)) {
-				result[b] = Number(a.replace(`${b}:`, ""));
-				if (Number.isNaN(result[b])) result[b] = a.replace(`${b}:`, "");
+	match.forEach((key) => {
+		const keyString = `${key}:`;
+		(str?.split(";") ?? []).forEach((item) => {
+			if (new RegExp(keyString).test(item)) {
+				const pureItem = item.replace(keyString, "");
+				result[key] = Number(pureItem);
+				if (Number.isNaN(result[key])) result[key] = pureItem;
 			}
 		});
 	});

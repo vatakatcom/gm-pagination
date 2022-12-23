@@ -1,14 +1,8 @@
-export function str2num(str: string) {
+export function str2num(str: string): number {
 	return [...str]
-		.map((i: number | string) => {
-			if (isFinite(i as number) === true || i === ".") {
-				return i;
-			} else {
-				return " ";
-			}
-		})
+		.map((i) => (isFinite(Number(i)) === true || i === "." ? i : " "))
 		.join("")
 		.split(" ")
-		.filter((i) => i != "")
+		.filter((i) => i !== "")
 		.map((i) => Number(i))[0];
 }

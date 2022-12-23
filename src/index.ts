@@ -1,5 +1,5 @@
 import { Context } from "grammy";
-import { MenuFlavor, MenuRange } from "@grammyjs/menu";
+import { MenuRange } from "@grammyjs/menu";
 import { paginated, RowButton } from "./utils/paginated.js";
 import { encodeMatch } from "./utils/encodematch.js";
 import { replaceMatch } from "./utils/replacematch.js";
@@ -10,50 +10,35 @@ export function usePagination<C extends Context = Context>(
 	pageSize = 5
 ): (ctx: C, range: MenuRange<C>) => Promise<MenuRange<C>> {
 	return async (ctx, range) => {
-		try {
-			const buttons = await getButtons(ctx);
-			const { p } = encodeMatch(ctx.match as string, ["p"]);
+		const match = ctx.match as string;
+		const { p } = encodeMatch(match, ["p"]);
+		const { rows, empty, pagination } = paginated(
+			await getButtons(ctx),
+			pageSize,
+			(p as number) ?? 1
+		);
 
-			const { empty, pagination, rows } = paginated(buttons, pageSize, (p as number) ?? 1);
+		rows.forEach((row) => {
+			const button = { text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") };
+			typeof row.submenu === "undefined"
+				? range.text(button, row.callback!).row()
+				: range.submenu(button, row.submenu, row.callback!).row();
+		});
 
-			for (let i = 0; i < rows.length; i++) {
-				const row = rows[i];
+		empty.forEach(() => range.text("").row());
 
-				if (typeof row.submenu === "undefined") {
-					range
-						.text(
-							{ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") },
-							row.callback!
-						)
-						.row();
-				} else {
-					range
-						.submenu(
-							{ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") },
-							row.submenu,
-							row.callback!
-						)
-						.row();
-				}
-			}
-
-			for (let i = 0; i < empty.length; i++) range.text("").row();
-
-			pagination.forEach((a) =>
-				range.text(
-					{
-						text: a.text,
-						payload:
-							typeof ctx.match !== "undefined" && (ctx.match as string) !== ""
-								? replaceMatch("p", str2num(a.payload), ctx.match as string)
-								: a.payload,
-					},
-					a.callback!
-				)
-			);
-		} catch (error) {
-			throw error;
-		}
+		pagination.forEach((button) =>
+			range.text(
+				{
+					text: button.text,
+					payload:
+						typeof match !== "undefined" && match !== ""
+							? replaceMatch("p", str2num(button.payload), match)
+							: button.payload,
+				},
+				button.callback!
+			)
+		);
 
 		return range;
 	};
