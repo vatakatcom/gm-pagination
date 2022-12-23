@@ -55,7 +55,6 @@ export function paginated<C extends Context = Context>(
 
 	if (isOne) {
 		result.pagination.push({ text: "", payload: "" }, { text: "", payload: "" });
-
 		return result;
 	}
 
@@ -67,7 +66,6 @@ export function paginated<C extends Context = Context>(
 	if (!isCountLessPagination && !isMiddle && isStart) {
 		for (let i = 1; i <= 3; i++)
 			result.pagination.push(button(i, i === pageNumber ? Pagination.STAY : Pagination.EMPTY));
-
 		result.pagination.push(button(4, Pagination.NEXT), button(pagesCount, Pagination.LAST));
 	}
 
@@ -84,7 +82,6 @@ export function paginated<C extends Context = Context>(
 	// End list
 	if (!isCountLessPagination && !isMiddle && isEnd) {
 		result.pagination.push(button(1, Pagination.FIRST), button(pagesCount - 3, Pagination.PREV));
-
 		for (let i = 2; i >= 0; i--)
 			result.pagination.push(
 				button(pagesCount - i, pagesCount - i === pageNumber ? Pagination.STAY : Pagination.EMPTY)
