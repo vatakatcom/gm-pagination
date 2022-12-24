@@ -9,64 +9,39 @@ export function paginated(array, pageSize, index) {
     const isCountLessPagination = pagesCount <= 5;
     const isStart = pageNumber <= 3;
     const isEnd = pagesCount - pageNumber < 3;
-    const pagination = [];
-    const empty = [];
-    if (isEmptyRows) {
-        for (let i = 0; i < emptyCount; i++) {
-            empty.push(null);
-        }
-    }
-    if (isOne)
-        return {
-            rows,
-            count: pagesCount,
-            pagination: [
-                { text: "", payload: "" },
-                { text: "", payload: "" },
-            ],
-            empty,
-            index: pageNumber,
-        };
-    if (isCountLessPagination) {
-        for (let i = 1; i <= pagesCount; i++) {
-            pagination.push(button(i, i === pageNumber ? "\u00B7 $ \u00B7" /* Pagination.STAY */ : "$" /* Pagination.EMPTY */));
-        }
-    }
-    else {
-        if (isMiddle) {
-            // Middle list
-            pagination.push(button(1, "\u00AB $" /* Pagination.FIRST */));
-            pagination.push(button(pageNumber - 1, "\u2039 $" /* Pagination.PREV */));
-            pagination.push(button(pageNumber, "\u00B7 $ \u00B7" /* Pagination.STAY */));
-            pagination.push(button(pageNumber + 1, "$ \u203A" /* Pagination.NEXT */));
-            pagination.push(button(pagesCount, "$ \u00BB" /* Pagination.LAST */));
-        }
-        else {
-            if (isStart) {
-                // Start list
-                for (let i = 1; i <= 3; i++) {
-                    pagination.push(button(i, i === pageNumber ? "\u00B7 $ \u00B7" /* Pagination.STAY */ : "$" /* Pagination.EMPTY */));
-                }
-                pagination.push(button(4, "$ \u203A" /* Pagination.NEXT */));
-                pagination.push(button(pagesCount, "$ \u00BB" /* Pagination.LAST */));
-            }
-            if (isEnd) {
-                // End list
-                pagination.push(button(1, "\u00AB $" /* Pagination.FIRST */));
-                pagination.push(button(pagesCount - 3, "\u2039 $" /* Pagination.PREV */));
-                for (let i = 2; i >= 0; i--) {
-                    pagination.push(button(pagesCount - i, pagesCount - i === pageNumber ? "\u00B7 $ \u00B7" /* Pagination.STAY */ : "$" /* Pagination.EMPTY */));
-                }
-            }
-        }
-    }
-    return {
+    const result = {
         rows,
         count: pagesCount,
-        pagination,
-        empty,
+        pagination: [],
+        empty: [],
         index: pageNumber,
     };
+    if (isEmptyRows)
+        for (let i = 0; i < emptyCount; i++)
+            result.empty.push(null);
+    if (isOne) {
+        result.pagination.push({ text: "", payload: "" }, { text: "", payload: "" });
+        return result;
+    }
+    if (isCountLessPagination)
+        for (let i = 1; i <= pagesCount; i++)
+            result.pagination.push(button(i, i === pageNumber ? "\u00B7 $ \u00B7" /* Pagination.STAY */ : "$" /* Pagination.EMPTY */));
+    // Start list
+    if (!isCountLessPagination && !isMiddle && isStart) {
+        for (let i = 1; i <= 3; i++)
+            result.pagination.push(button(i, i === pageNumber ? "\u00B7 $ \u00B7" /* Pagination.STAY */ : "$" /* Pagination.EMPTY */));
+        result.pagination.push(button(4, "$ \u203A" /* Pagination.NEXT */), button(pagesCount, "$ \u00BB" /* Pagination.LAST */));
+    }
+    // Middle list
+    if (!isCountLessPagination && isMiddle)
+        result.pagination.push(button(1, "\u00AB $" /* Pagination.FIRST */), button(pageNumber - 1, "\u2039 $" /* Pagination.PREV */), button(pageNumber, "\u00B7 $ \u00B7" /* Pagination.STAY */), button(pageNumber + 1, "$ \u203A" /* Pagination.NEXT */), button(pagesCount, "$ \u00BB" /* Pagination.LAST */));
+    // End list
+    if (!isCountLessPagination && !isMiddle && isEnd) {
+        result.pagination.push(button(1, "\u00AB $" /* Pagination.FIRST */), button(pagesCount - 3, "\u2039 $" /* Pagination.PREV */));
+        for (let i = 2; i >= 0; i--)
+            result.pagination.push(button(pagesCount - i, pagesCount - i === pageNumber ? "\u00B7 $ \u00B7" /* Pagination.STAY */ : "$" /* Pagination.EMPTY */));
+    }
+    return result;
 }
 function button(num, text) {
     return {
