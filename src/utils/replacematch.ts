@@ -1,10 +1,5 @@
 export function replaceMatch(key: string, value: number, payload: string) {
-	const arr = payload?.split(";") ?? [];
-
-	return arr
-		.map((a) => {
-			if (new RegExp(`${key}:`).test(a)) return `${key}:${value}`;
-			return a;
-		})
+	return (payload?.split(";") ?? [])
+		.map((a) => (new RegExp(`${key}:`).test(a) ? `${key}:${value}` : a))
 		.join(";");
 }

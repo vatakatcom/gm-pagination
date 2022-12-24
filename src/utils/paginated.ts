@@ -43,73 +43,52 @@ export function paginated<C extends Context = Context>(
 	const isCountLessPagination = pagesCount <= 5;
 	const isStart = pageNumber <= 3;
 	const isEnd = pagesCount - pageNumber < 3;
-	const pagination: Button<C & MenuFlavor>[] = [];
-	const empty: null[] = [];
-
-	if (isEmptyRows) {
-		for (let i = 0; i < emptyCount; i++) {
-			empty.push(null);
-		}
-	}
-
-	if (isOne)
-		return {
-			rows,
-			count: pagesCount,
-			pagination: [
-				{ text: "", payload: "" },
-				{ text: "", payload: "" },
-			],
-			empty,
-			index: pageNumber,
-		};
-
-	if (isCountLessPagination) {
-		for (let i = 1; i <= pagesCount; i++) {
-			pagination.push(button(i, i === pageNumber ? Pagination.STAY : Pagination.EMPTY));
-		}
-	} else {
-		if (isMiddle) {
-			// Middle list
-			pagination.push(button(1, Pagination.FIRST));
-			pagination.push(button(pageNumber - 1, Pagination.PREV));
-			pagination.push(button(pageNumber, Pagination.STAY));
-			pagination.push(button(pageNumber + 1, Pagination.NEXT));
-			pagination.push(button(pagesCount, Pagination.LAST));
-		} else {
-			if (isStart) {
-				// Start list
-				for (let i = 1; i <= 3; i++) {
-					pagination.push(button(i, i === pageNumber ? Pagination.STAY : Pagination.EMPTY));
-				}
-
-				pagination.push(button(4, Pagination.NEXT));
-				pagination.push(button(pagesCount, Pagination.LAST));
-			}
-			if (isEnd) {
-				// End list
-				pagination.push(button(1, Pagination.FIRST));
-				pagination.push(button(pagesCount - 3, Pagination.PREV));
-
-				for (let i = 2; i >= 0; i--) {
-					pagination.push(
-						button(
-							pagesCount - i,
-							pagesCount - i === pageNumber ? Pagination.STAY : Pagination.EMPTY
-						)
-					);
-				}
-			}
-		}
-	}
-
-	return {
+	const result: Result<C> = {
 		rows,
 		count: pagesCount,
-		pagination,
-		empty,
+		pagination: [],
+		empty: [],
 		index: pageNumber,
 	};
+
+	if (isEmptyRows) for (let i = 0; i < emptyCount; i++) result.empty.push(null);
+
+	if (isOne) {
+		result.pagination.push({ text: "", payload: "" }, { text: "", payload: "" });
+		return result;
+	}
+
+	if (isCountLessPagination)
+		for (let i = 1; i <= pagesCount; i++)
+			result.pagination.push(button(i, i === pageNumber ? Pagination.STAY : Pagination.EMPTY));
+
+	// Start list
+	if (!isCountLessPagination && !isMiddle && isStart) {
+		for (let i = 1; i <= 3; i++)
+			result.pagination.push(button(i, i === pageNumber ? Pagination.STAY : Pagination.EMPTY));
+		result.pagination.push(button(4, Pagination.NEXT), button(pagesCount, Pagination.LAST));
+	}
+
+	// Middle list
+	if (!isCountLessPagination && isMiddle)
+		result.pagination.push(
+			button(1, Pagination.FIRST),
+			button(pageNumber - 1, Pagination.PREV),
+			button(pageNumber, Pagination.STAY),
+			button(pageNumber + 1, Pagination.NEXT),
+			button(pagesCount, Pagination.LAST)
+		);
+
+	// End list
+	if (!isCountLessPagination && !isMiddle && isEnd) {
+		result.pagination.push(button(1, Pagination.FIRST), button(pagesCount - 3, Pagination.PREV));
+		for (let i = 2; i >= 0; i--)
+			result.pagination.push(
+				button(pagesCount - i, pagesCount - i === pageNumber ? Pagination.STAY : Pagination.EMPTY)
+			);
+	}
+
+	return result;
 }
 
 function button<C extends Context = Context>(

@@ -4,35 +4,22 @@ import { replaceMatch } from "./utils/replacematch.js";
 import { str2num } from "./utils/str2num.js";
 export function usePagination(getButtons, pageSize = 5) {
     return async (ctx, range) => {
-        try {
-            const buttons = await getButtons(ctx);
-            const { p } = encodeMatch(ctx.match, ["p"]);
-            const { empty, pagination, rows } = paginated(buttons, pageSize, p ?? 1);
-            for (let i = 0; i < rows.length; i++) {
-                const row = rows[i];
-                if (typeof row.submenu === "undefined") {
-                    range
-                        .text({ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") }, row.callback)
-                        .row();
-                }
-                else {
-                    range
-                        .submenu({ text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") }, row.submenu, row.callback)
-                        .row();
-                }
-            }
-            for (let i = 0; i < empty.length; i++)
-                range.text("").row();
-            pagination.forEach((a) => range.text({
-                text: a.text,
-                payload: typeof ctx.match !== "undefined" && ctx.match !== ""
-                    ? replaceMatch("p", str2num(a.payload), ctx.match)
-                    : a.payload,
-            }, a.callback));
-        }
-        catch (error) {
-            throw error;
-        }
+        const match = ctx.match;
+        const { p } = encodeMatch(match, ["p"]);
+        const { rows, empty, pagination } = paginated(await getButtons(ctx), pageSize, p ?? 1);
+        rows.forEach((row) => {
+            const button = { text: row.text, payload: [row.payload, `p:${p ?? 1}`].join(";") };
+            typeof row.submenu === "undefined"
+                ? range.text(button, row.callback).row()
+                : range.submenu(button, row.submenu, row.callback).row();
+        });
+        empty.forEach(() => range.text("").row());
+        pagination.forEach((button) => range.text({
+            text: button.text,
+            payload: typeof match !== "undefined" && match !== ""
+                ? replaceMatch("p", str2num(button.payload), match)
+                : button.payload,
+        }, button.callback));
         return range;
     };
 }
