@@ -1,5 +1,5 @@
-import { MenuFlavor } from "@grammyjs/menu";
-import { Context } from "grammy";
+import type { MenuFlavor } from "@grammyjs/menu";
+import type { Context } from "grammy";
 
 export interface Button<C extends Context = Context> {
 	text: string;
