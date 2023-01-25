@@ -1,5 +1,5 @@
 {
-  "name": "@vatakat.com/gm-pagination",
+  "name": "@vtkcom/gm-pagination",
   "version": "1.0.9",
   "description": "Pagination for grammy menu",
   "main": "build/index.js",
