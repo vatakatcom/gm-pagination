@@ -6,8 +6,8 @@ name: Node.js Package
 on:
   push:
     branches:
-      - "master"
-      # - 'releases/**'
+      # - "master"
+      - "releases/**"
 
 jobs:
   publish-npm:
