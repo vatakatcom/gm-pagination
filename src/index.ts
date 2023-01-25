@@ -1,5 +1,5 @@
-import { Context } from "grammy";
-import { MenuRange } from "@grammyjs/menu";
+import type { Context } from "grammy";
+import type { MenuRange } from "@grammyjs/menu";
 import { paginated, RowButton } from "./utils/paginated.js";
 import { encodeMatch } from "./utils/encodematch.js";
 import { replaceMatch } from "./utils/replacematch.js";
