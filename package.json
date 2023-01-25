@@ -1,5 +1,5 @@
 {
-	"name": "@vtk/gm-pagination",
+	"name": "@vatakat.com/gm-pagination",
 	"version": "1.0.0",
 	"description": "Pagination for grammy menu",
 	"main": "build/index.js",
@@ -14,7 +14,7 @@
 	],
 	"types": "build/index.d.ts",
 	"type": "module",
-	"author": "vatakat",
+	"author": "vatakatcom",
 	"license": "MIT",
 	"devDependencies": {
 		"@grammyjs/menu": "^1.1.2",
