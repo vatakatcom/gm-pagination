@@ -4,8 +4,7 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+  branch: master
 
 jobs:
   build:
@@ -16,6 +15,7 @@ jobs:
         with:
           node-version: 16
       - run: npm ci
+      - run: npm run build
 
   publish-npm:
     needs: build
