@@ -1,6 +1,6 @@
 {
   "name": "@vatakat.com/gm-pagination",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Pagination for grammy menu",
   "main": "build/index.js",
   "scripts": {
