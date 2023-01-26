@@ -1,6 +1,6 @@
 {
   "name": "@vtkcom/gm-pagination",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "Pagination for grammy menu",
   "main": "build/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   ],
   "types": "build/index.d.ts",
   "type": "module",
-  "author": "vatakatcom",
+  "author": "vtkcom",
   "license": "MIT",
   "devDependencies": {
     "@grammyjs/menu": "^1.1.2",
@@ -23,10 +23,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vatakatcom/gm-pagination.git"
+    "url": "git+https://github.com/vtkcom/gm-pagination.git"
   },
   "bugs": {
-    "url": "https://github.com/vatakatcom/gm-pagination/issues"
+    "url": "https://github.com/vtkcom/gm-pagination/issues"
   },
-  "homepage": "https://github.com/vatakatcom/gm-pagination#readme"
+  "homepage": "https://github.com/vtkcom/gm-pagination#readme"
 }
