@@ -27,7 +27,7 @@ jobs:
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
-          scope: "@vatakatcom"
+          scope: "@vtkcom"
       - run: npm ci
       - run: npm run build
       - run: npm publish
